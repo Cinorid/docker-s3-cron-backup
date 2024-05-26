@@ -1,7 +1,6 @@
 # Docker S3 Cron Backup
 
-[:star: Docker Hub](https://hub.docker.com/r/peterrus/s3-cron-backup/)
-[:star: Github](https://github.com/peterrus/docker-s3-cron-backup)
+[:star: Github](https://github.com/cinorid/docker-s3-cron-backup)
 
 ## What is it?
 A modest little container image that periodically backups any volume mounted to `/data` to S3-compatible storage in the form of a timestamped, gzipped, tarball. By default this container is configured to work with Amazon S3 but it should work with most S3-backends.
@@ -9,7 +8,7 @@ A modest little container image that periodically backups any volume mounted to 
 ## Great, but how does it work?
 An Alpine Linux instance runs nothing more than crond with a crontab that contains nothing more than one single entry that triggers the backup script. When this script is run, the volume mounted at `/data` gets tarred, gzipped and uploaded to a S3 bucket. Afterwards the archive gets deleted from the container. The mounted volume, of course, will be left untouched.
 
-I invite you to check out the source of this image, it's rather simple and should be easy to understand. If this isn't the case, feel free to open an issue on [github](https://github.com/peterrus/docker-s3-cron-backup)
+I invite you to check out the source of this image, it's rather simple and should be easy to understand. If this isn't the case, feel free to open an issue on [github](https://github.com/cinorid/docker-s3-cron-backup)
 
 *Pull requests welcome*
 
@@ -41,8 +40,10 @@ docker run \
   -e AWS_DEFAULT_REGION=your-aws-region \
   -e CRON_SCHEDULE="0 * * * *" \
   -e BACKUP_NAME=make-something-up \
+  -e TARGET=/data \
+  -e EXCLUDE_FILES=*/logs \
   -v /your/awesome/data:/data:ro \
-  peterrus/s3-cron-backup
+  ghcr.io/cinorid/s3-cron-backup
 ```
 
 ### Docker-compose
@@ -52,7 +53,7 @@ version: '3.8'
 
 services:
   my-backup-unit:
-    image: peterrus/s3-cron-backup
+    image: ghcr.io/cinorid/s3-cron-backup
     environment:
       - AWS_ACCESS_KEY_ID=SOME8AWS3ACCESS9KEY
       - AWS_SECRET_ACCESS_KEY=sUp3rS3cr3tK3y0fgr34ts3cr3cy
@@ -60,6 +61,8 @@ services:
       - AWS_DEFAULT_REGION=your-aws-region
       - CRON_SCHEDULE=0 * * * * # run every hour
       - BACKUP_NAME=make-something-up
+      - TARGET=/data
+      - EXCLUDE_FILES=*/logs
     volumes:
       - /your/awesome/data:/data:ro #use ro to make sure the volume gets mounted read-only
     restart: always
@@ -88,6 +91,8 @@ From a security perspective it is often preferable to create a dedicated IAM use
 Let this container serve as a starting point and an inspiration! Feel free to modify it and even open a PR if you feel others can benefit from these changes.
 
 ## Contributors
+- [peterrus](https://github.com/peterrus)
+- [richardwiden](https://github.com/richardwiden)
 - [jayesh100](https://github.com/jayesh100)
 - [ifolarin](https://github.com/ifolarin)
 - [stex79](https://github.com/stex79)
