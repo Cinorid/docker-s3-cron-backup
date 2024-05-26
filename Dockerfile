@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.19
 
 RUN apk -Uuv add busybox-suid less aws-cli curl && \
 	rm /var/cache/apk/*
