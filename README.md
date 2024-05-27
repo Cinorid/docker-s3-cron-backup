@@ -21,7 +21,7 @@ The container is configured via a set of required environment variables:
 - `CRON_SCHEDULE`: Check out [crontab.guru](https://crontab.guru/) for some examples:
 - `BACKUP_NAME`: A name to identify your backup among the other files in your bucket 
 - `BACKUP_NAME_TIMESTAMP`: It will postfixed `BACKUP_NAME` with the current timestamp (date and time) (Optional, defaults to true)
-- `EXCLUDE_FILES`: Passed to tar as --exclude=$EXCLUDE_FILES treating $DATA_PATH as current dir, If you need to exclude more than one pattern, you can set it like this `EXCLUDE_FILES=*/logs --exclude=*.log`
+- `EXCLUDE_FILES`: Passed to tar as --exclude=$EXCLUDE_FILES treating $DATA_PATH as current dir, If you need to exclude more than one pattern, you can set it like this `EXCLUDE_FILES={*/logs,*.tmp}`
 - `IGNORE_ERRORS`: Passed to tar parameter --ignore-failed-read --ignore-command-error --warning=no-file-changed
 
 And the following optional environment variables:
