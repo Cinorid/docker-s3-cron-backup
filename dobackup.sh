@@ -35,6 +35,7 @@ if [ -z "${EXCLUDE_FILES}" ]; then
   EXCLUDE_ARGS=""
 else
   EXCLUDE_ARGS="--exclude=${EXCLUDE_FILES}"
+  echo "exclude: ${EXCLUDE_ARGS}"
 fi
 
 # Check if IGNORE_ERRORS variable is set
