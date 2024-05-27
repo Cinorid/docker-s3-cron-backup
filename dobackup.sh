@@ -37,8 +37,16 @@ else
   EXCLUDE_ARGS="--exclude=${EXCLUDE_FILES}"
 fi
 
+# Check if IGNORE_ERRORS variable is set
+if [ -z "${IGNORE_ERRORS}" ]; then
+  IGNORE_ERRORS=""
+else
+  echo "IGNORE_ERRORS is enabled"
+  IGNORE_ERRORS="--ignore-failed-read --ignore-command-error --warning=no-file-changed"
+fi
+
 echo "creating archive"
-tar -zcvf "${FILE_NAME}" ${EXCLUDE_ARGS} "${TARGET}"
+tar -zcvf "${FILE_NAME}" ${IGNORE_ERRORS} "${EXCLUDE_ARGS}" "${TARGET}"
 echo "uploading archive to S3 [${FILE_NAME}, storage class - ${S3_STORAGE_CLASS}]"
 aws s3 ${AWS_ARGS} cp --storage-class "${S3_STORAGE_CLASS}" "${FILE_NAME}" "${S3_BUCKET_URL}"
 echo "removing local archive"
